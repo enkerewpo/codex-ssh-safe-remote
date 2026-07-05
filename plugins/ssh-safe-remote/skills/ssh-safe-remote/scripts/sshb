@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage:
+  sshb HOST [REMOTE_BASH_STRING]
+  sshb HOST <<'REMOTE'
+  ...
+  REMOTE
+
+Runs remote code with bash -seuo pipefail, avoiding remote zsh and local glob issues.
+Set SSH_SAFE_OPTS for extra ssh options.
+EOF
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 2
+fi
+
+host=$1
+shift || true
+
+ssh_opts=(
+  -o BatchMode=yes
+  -o ConnectTimeout=15
+  -o ServerAliveInterval=30
+  -o ServerAliveCountMax=3
+)
+
+if [[ -n "${SSH_SAFE_OPTS:-}" ]]; then
+  # shellcheck disable=SC2206
+  extra_opts=(${SSH_SAFE_OPTS})
+  ssh_opts+=("${extra_opts[@]}")
+fi
+
+if [[ $# -gt 0 ]]; then
+  printf '%s\n' "$*" | ssh "${ssh_opts[@]}" "$host" 'bash -seuo pipefail'
+else
+  ssh "${ssh_opts[@]}" "$host" 'bash -seuo pipefail'
+fi

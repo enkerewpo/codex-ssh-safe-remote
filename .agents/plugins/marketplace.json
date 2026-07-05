@@ -1,0 +1,20 @@
+{
+  "name": "ssh-safe-remote-marketplace",
+  "interface": {
+    "displayName": "SSH Safe Remote"
+  },
+  "plugins": [
+    {
+      "name": "ssh-safe-remote",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ssh-safe-remote"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

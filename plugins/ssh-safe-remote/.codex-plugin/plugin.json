@@ -1,0 +1,22 @@
+{
+  "name": "ssh-safe-remote",
+  "version": "1.0.0",
+  "description": "Safe, token-efficient SSH wrappers for Codex remote shell work.",
+  "author": {
+    "name": "SSH Safe Remote maintainers"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "SSH Safe Remote",
+    "shortDescription": "Run remote SSH commands without shell quoting traps.",
+    "longDescription": "SSH Safe Remote provides small wrapper scripts and workflow rules for running remote bash, remote Python, and rsync transfers from Codex while avoiding local shell expansion, remote login-shell surprises, heredoc quoting bugs, and long nested command strings.",
+    "developerName": "SSH Safe Remote maintainers",
+    "category": "Developer Tools",
+    "capabilities": [
+      "SSH",
+      "Remote shell",
+      "Developer workflow"
+    ],
+    "defaultPrompt": "Use SSH Safe Remote to run remote bash or Python commands safely."
+  }
+}

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage:
+  sshpy HOST <<'PY'
+  ...
+  PY
+
+Runs stdin as remote python3 code. Use this instead of nested ssh python -c.
+Set SSH_SAFE_OPTS for extra ssh options.
+EOF
+}
+
+if [[ $# -ne 1 ]]; then
+  usage
+  exit 2
+fi
+
+host=$1
+ssh_opts=(
+  -o BatchMode=yes
+  -o ConnectTimeout=15
+  -o ServerAliveInterval=30
+  -o ServerAliveCountMax=3
+)
+
+if [[ -n "${SSH_SAFE_OPTS:-}" ]]; then
+  # shellcheck disable=SC2206
+  extra_opts=(${SSH_SAFE_OPTS})
+  ssh_opts+=("${extra_opts[@]}")
+fi
+
+ssh "${ssh_opts[@]}" "$host" 'python3 -'

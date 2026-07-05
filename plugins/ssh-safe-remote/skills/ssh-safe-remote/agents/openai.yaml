@@ -1,0 +1,4 @@
+interface:
+  display_name: "SSH Safe Remote"
+  short_description: "Run remote SSH commands safely."
+  default_prompt: "Use SSH Safe Remote to run remote bash or Python commands without zsh quoting, glob, or heredoc issues."

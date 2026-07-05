@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage:
+  rscp SRC DEST
+
+Copies local/remote paths with rsync.
+Examples:
+  rscp REMOTE_HOST:/tmp/results/ ./results/
+  rscp ./file.txt REMOTE_HOST:/tmp/
+
+Set RSCP_OPTS for extra rsync options.
+EOF
+}
+
+if [[ $# -ne 2 ]]; then
+  usage
+  exit 2
+fi
+
+rsync_opts=(-av)
+if rsync --help 2>&1 | grep -q -- '--protect-args'; then
+  rsync_opts+=(--protect-args)
+elif rsync --help 2>&1 | grep -q -- '-s, --protect-args'; then
+  rsync_opts+=(-s)
+fi
+
+if [[ -n "${RSCP_OPTS:-}" ]]; then
+  # shellcheck disable=SC2206
+  extra_opts=(${RSCP_OPTS})
+  rsync_opts+=("${extra_opts[@]}")
+fi
+
+rsync "${rsync_opts[@]}" "$1" "$2"
